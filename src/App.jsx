@@ -4,7 +4,7 @@ function App() {
 
     return (
         <>
-            <h1>Hello brothers of Detroit #2</h1>
+            <h1>Hello Brothers of Detroit #2</h1>
             <p>Our payment portal is currently down.</p>
             <p>The Grand Lodge of Michigan is switching over between online payment processors and as such we are unable to take online payments at this time.</p>
             <p>Once we are able to take online dues payments this site will be updated to redirect to the new processor.</p>
