@@ -1,0 +1,386 @@
+warning: in the working copy of 'src/App.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/App.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/index.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'vite.config.js', LF will be replaced by CRLF the next time Git touches it
+diff --git a/src/App.css b/src/App.css
+index b9d355d..403eab2 100644
+--- a/src/App.css
++++ b/src/App.css
+@@ -1,42 +1,123 @@
+-#root {
+-  max-width: 1280px;
++:root {
++  --bg: #0b1220;
++  --card: rgba(255, 255, 255, 0.06);
++  --card-strong: rgba(255, 255, 255, 0.1);
++  --text: rgba(255, 255, 255, 0.92);
++  --muted: rgba(255, 255, 255, 0.7);
++  --border: rgba(255, 255, 255, 0.14);
++  --accent: #7dd3fc;
++}
++
++.appShell {
++  min-height: 100vh;
++  background: radial-gradient(1200px 600px at 20% 10%, rgba(125, 211, 252, 0.12), transparent 55%),
++  radial-gradient(900px 500px at 80% 20%, rgba(167, 139, 250, 0.10), transparent 60%),
++  var(--bg);
++  color: var(--text);
++}
++
++.siteHeader {
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++  gap: 16px;
++  padding: 18px 22px;
++  border-bottom: 1px solid var(--border);
++  position: sticky;
++  top: 0;
++  background: rgba(11, 18, 32, 0.75);
++  backdrop-filter: blur(10px);
++}
++
++.brandTitle {
++  font-weight: 800;
++  letter-spacing: 0.2px;
++  font-size: 18px;
++}
++
++.brandSub {
++  color: var(--muted);
++  font-size: 12px;
++  margin-top: 2px;
++}
++
++.nav {
++  display: flex;
++  gap: 10px;
++  flex-wrap: wrap;
++  justify-content: flex-end;
++}
++
++.navLink {
++  color: var(--text);
++  text-decoration: none;
++  padding: 8px 10px;
++  border-radius: 10px;
++  border: 1px solid transparent;
++  background: transparent;
++}
++
++.navLink:hover {
++  border-color: var(--border);
++  background: rgba(255, 255, 255, 0.05);
++}
++
++.navLink.active {
++  border-color: rgba(125, 211, 252, 0.45);
++  background: rgba(125, 211, 252, 0.12);
++}
++
++.siteMain {
+   margin: 0 auto;
+-  padding: 2rem;
+-  text-align: center;
++  padding: 22px;
+ }
+
+-.logo {
+-  height: 6em;
+-  padding: 1.5em;
+-  will-change: filter;
+-  transition: filter 300ms;
++.card {
++  border: 1px solid var(--border);
++  background: var(--card);
++  border-radius: 16px;
++  padding: 20px;
+ }
+-.logo:hover {
+-  filter: drop-shadow(0 0 2em #646cffaa);
++
++.lead {
++  color: var(--muted);
++  font-size: 16px;
++  line-height: 1.55;
+ }
+-.logo.react:hover {
+-  filter: drop-shadow(0 0 2em #61dafbaa);
++
++.grid {
++  display: grid;
++  grid-template-columns: 1fr;
++  gap: 14px;
++  margin-top: 14px;
+ }
+
+-@keyframes logo-spin {
+-  from {
+-    transform: rotate(0deg);
+-  }
+-  to {
+-    transform: rotate(360deg);
++@media (min-width: 820px) {
++  .grid {
++    grid-template-columns: 1fr 1fr;
+   }
+ }
+
+-@media (prefers-reduced-motion: no-preference) {
+-  a:nth-of-type(2) .logo {
+-    animation: logo-spin infinite 20s linear;
+-  }
++.panel {
++  border: 1px solid var(--border);
++  background: var(--card-strong);
++  border-radius: 14px;
++  padding: 14px;
+ }
+
+-.card {
+-  padding: 2em;
++.callout {
++  border-color: rgba(125, 211, 252, 0.35);
+ }
+
+-.read-the-docs {
+-  color: #888;
++.muted {
++  color: var(--muted);
+ }
++
++a {
++  color: var(--accent);
++}
++
++.siteFooter {
++  margin: 0 auto;
++  padding: 18px 22px 28px;
++}
+\ No newline at end of file
+diff --git a/src/App.jsx b/src/App.jsx
+index 95841e5..0ce645b 100644
+--- a/src/App.jsx
++++ b/src/App.jsx
+@@ -1,16 +1,47 @@
++import { useMemo  } from 'react'
++import { ContactPage } from './pages/Contact.jsx'
++import { HomePage } from './pages/HomePage.jsx'
++import { DuesPage } from './pages/Dues.jsx'
++import { NotFoundPage } from './pages/NotFound.jsx'
++import { NavLink } from './components/NavLink.jsx'
++import { useHashRoute } from './hooks/useHashRoute.jsx'
+ import './App.css'
+
++
+ function App() {
++    const route = useHashRoute()
++
++    const Page = useMemo(() => {
++        if (route === '/' || route === '') return HomePage
++        if (route === '/contact') return ContactPage
++        if (route === '/dues') return DuesPage
++        return NotFoundPage
++    }, [route])
+
+     return (
+-        <>
+-            <h1>Hello Brothers of Detroit #2</h1>
+-            <p>Our payment portal is currently down.</p>
+-            <p>The Grand Lodge of Michigan is switching over between online payment processors and as such we are unable to take online payments at this time.</p>
+-            <p>Once we are able to take online dues payments this site will be updated to redirect to the new processor.</p>
+-            <p>Thank you for your understanding, please direct any questions and payments to secretary Pat at <a href="mailto:detroit2pm2016@gmail.com">detroit2pm2016@gmail.com</a></p>
+-        </>
++        <div className="appShell">
++            <header className="siteHeader">
++                <div className="brand">
++                    <div className="brandTitle">Detroit Lodge #2</div>
++                    <div className="brandSub">Free and Accepted Masons of Michigan</div>
++                </div>
++
++                <nav className="nav">
++                    <NavLink to="/">Home</NavLink>
++                    <NavLink to="/contact">Contact Us</NavLink>
++                    <NavLink to="/dues">Pay Your Dues</NavLink>
++                </nav>
++            </header>
++
++            <main className="siteMain">
++                <Page />
++            </main>
++
++            <footer className="siteFooter">
++                <span className="muted">© {new Date().getFullYear()} Detroit #2</span>
++            </footer>
++        </div>
+     )
+ }
+
+-export default App
++export default App
+\ No newline at end of file
+diff --git a/src/components/NavLink.jsx b/src/components/NavLink.jsx
+new file mode 100644
+index 0000000..e3d775c
+--- /dev/null
++++ b/src/components/NavLink.jsx
+@@ -0,0 +1,11 @@
++export function NavLink({ to, children }) {
++    const isActive =
++        (window.location.hash || '#/') === `#${to}` ||
++        ((window.location.hash === '' || window.location.hash === '#') && to === '/')
++
++    return (
++        <a className={`navLink ${isActive ? 'active' : ''}`} href={`#${to}`}>
++            {children}
++        </a>
++    )
++}
+diff --git a/src/hooks/useHashRoute.jsx b/src/hooks/useHashRoute.jsx
+new file mode 100644
+index 0000000..1be6642
+--- /dev/null
++++ b/src/hooks/useHashRoute.jsx
+@@ -0,0 +1,15 @@
++import {useEffect, useState} from "react";
++
++export function useHashRoute() {
++    const getRoute = () => (window.location.hash || '#/').replace('#', '')
++
++    const [route, setRoute] = useState(getRoute)
++
++    useEffect(() => {
++        const onHashChange = () => setRoute(getRoute())
++        window.addEventListener('hashchange', onHashChange)
++        return () => window.removeEventListener('hashchange', onHashChange)
++    }, [])
++
++    return route
++}
+diff --git a/src/index.css b/src/index.css
+index 6119ad9..0a84a20 100644
+--- a/src/index.css
++++ b/src/index.css
+@@ -24,8 +24,6 @@ a:hover {
+
+ body {
+   margin: 0;
+-  display: flex;
+-  place-items: center;
+   min-width: 320px;
+   min-height: 100vh;
+ }
+diff --git a/src/pages/Contact.jsx b/src/pages/Contact.jsx
+new file mode 100644
+index 0000000..8dce56b
+--- /dev/null
++++ b/src/pages/Contact.jsx
+@@ -0,0 +1,18 @@
++export function ContactPage() {
++    return (
++        <section className="card">
++            <h1>Contact Us</h1>
++            <p className="lead">Questions, updates, or dues help — reach out anytime.</p>
++
++            <div className="panel">
++                <h2>Email</h2>
++                <p>
++                    <a href="mailto:detroit2pm2016@gmail.com">detroit2pm2016@gmail.com</a>
++                </p>
++                <p className="muted">
++                    Tip: Include your full name and the reason you’re contacting us so we can respond faster.
++                </p>
++            </div>
++        </section>
++    )
++}
+diff --git a/src/pages/Dues.jsx b/src/pages/Dues.jsx
+new file mode 100644
+index 0000000..66dccba
+--- /dev/null
++++ b/src/pages/Dues.jsx
+@@ -0,0 +1,19 @@
++export function DuesPage() {
++    return (
++        <section className="card">
++            <h1>Pay Your Dues</h1>
++            <p className="lead">
++                Online dues payment is now being processed through Grandview Systems.
++            </p>
++
++            <div className="panel">
++                <h2>How to Pay</h2>
++                <ol>
++                    <li>
++                        Log into the <a href="https://mi.grandview.systems/">Michigan Grandview Systems website</a>.
++                    </li>
++                </ol>
++            </div>
++        </section>
++    )
++}
+diff --git a/src/pages/HomePage.jsx b/src/pages/HomePage.jsx
+new file mode 100644
+index 0000000..11b0887
+--- /dev/null
++++ b/src/pages/HomePage.jsx
+@@ -0,0 +1,29 @@
++export function HomePage() {
++    return (
++        <section className="card">
++            <h1>Detroit #2</h1>
++            <p className="lead">
++                Welcome to the official site for our club. We’re glad you’re here.
++            </p>
++
++            <div className="grid">
++                <div className="panel">
++                    <h2>What you’ll find here</h2>
++                    <ul>
++                        <li>A general welcome message and quick info</li>
++                        <li>How to contact us</li>
++                        <li>How to pay dues (and what to do if online payment is unavailable)</li>
++                    </ul>
++                </div>
++
++                <div className="panel">
++                    <h2>Quick links</h2>
++                    <p>
++                        Use the navigation above to visit <strong>Contact Us</strong> or{' '}
++                        <strong>Pay Your Dues</strong>.
++                    </p>
++                </div>
++            </div>
++        </section>
++    )
++}
+diff --git a/src/pages/NotFound.jsx b/src/pages/NotFound.jsx
+new file mode 100644
+index 0000000..3e673a3
+--- /dev/null
++++ b/src/pages/NotFound.jsx
+@@ -0,0 +1,10 @@
++export function NotFoundPage() {
++    return (
++        <section className="card">
++            <h1>Page Not Found</h1>
++            <p className="lead">
++                That page doesn’t exist. Use the navigation above to get back on track.
++            </p>
++        </section>
++    )
++}
+diff --git a/vite.config.js b/vite.config.js
+index e134a94..a549040 100644
+--- a/vite.config.js
++++ b/vite.config.js
+@@ -5,6 +5,9 @@ import react from '@vitejs/plugin-react'
+ export default defineConfig({
+   plugins: [react()],
+   server: {
++    watch: {
++      usePolling: true
++    },
+     host: 'localhost',
+     port: 3000,
+   },

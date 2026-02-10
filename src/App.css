@@ -1,42 +1,193 @@
-#root {
-  max-width: 1280px;
+:root {
+  --bg: #0b1220;
+  --card: rgba(255, 255, 255, 0.06);
+  --card-strong: rgba(255, 255, 255, 0.1);
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.7);
+  --border: rgba(255, 255, 255, 0.14);
+  --accent: #7dd3fc;
+}
+
+.appShell {
+  min-height: 100vh;
+  background: radial-gradient(1200px 600px at 20% 10%, rgba(125, 211, 252, 0.12), transparent 55%),
+  radial-gradient(900px 500px at 80% 20%, rgba(167, 139, 250, 0.10), transparent 60%),
+  var(--bg);
+  color: var(--text);
+}
+
+.siteHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(11, 18, 32, 0.75);
+  backdrop-filter: blur(10px);
+}
+
+.brandTitle {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  font-size: 18px;
+}
+
+.brandSub {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.navLink {
+  color: var(--text);
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.navLink:hover {
+  border-color: var(--border);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.navLink.active {
+  border-color: rgba(125, 211, 252, 0.45);
+  background: rgba(125, 211, 252, 0.12);
+}
+
+.siteMain {
+  max-width: 1024px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+  padding: 22px;
 }
 
 .card {
-  padding: 2em;
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 16px;
+  padding: 20px;
 }
 
-.read-the-docs {
-  color: #888;
+.lead {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+@media (min-width: 820px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.panel {
+  border: 1px solid var(--border);
+  background: var(--card-strong);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.callout {
+  border-color: rgba(125, 211, 252, 0.35);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+a {
+  color: var(--accent);
+}
+
+.siteFooter {
+  margin: 0 auto;
+  padding: 18px 22px 28px;
+}
+
+input, textarea, button {
+  font-family: inherit;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-strong);
+  color: var(--text);
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--accent);
+  background: rgba(125, 211, 252, 0.12);
+  color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: rgba(125, 211, 252, 0.2);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.success-msg {
+  color: #4ade80;
+  margin-bottom: 16px;
+  padding: 10px;
+  background: rgba(74, 222, 128, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.error-msg {
+  color: #f87171;
+  margin-bottom: 16px;
+  padding: 10px;
+  background: rgba(248, 113, 113, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(248, 113, 113, 0.2);
 }

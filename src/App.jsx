@@ -1,15 +1,46 @@
+import { useMemo  } from 'react'
+import { ContactPage } from './pages/Contact.jsx'
+import { HomePage } from './pages/HomePage.jsx'
+import { DuesPage } from './pages/Dues.jsx'
+import { NotFoundPage } from './pages/NotFound.jsx'
+import { NavLink } from './components/NavLink.jsx'
+import { useHashRoute } from './hooks/useHashRoute.jsx'
 import './App.css'
 
+
 function App() {
+    const route = useHashRoute()
+
+    const Page = useMemo(() => {
+        if (route === '/' || route === '') return HomePage
+        if (route === '/contact') return ContactPage
+        if (route === '/dues') return DuesPage
+        return NotFoundPage
+    }, [route])
 
     return (
-        <>
-            <h1>Hello Brothers of Detroit #2</h1>
-            <p>Our payment portal is currently down.</p>
-            <p>The Grand Lodge of Michigan is switching over between online payment processors and as such we are unable to take online payments at this time.</p>
-            <p>Once we are able to take online dues payments this site will be updated to redirect to the new processor.</p>
-            <p>Thank you for your understanding, please direct any questions and payments to secretary Pat at <a href="mailto:detroit2pm2016@gmail.com">detroit2pm2016@gmail.com</a></p>
-        </>
+        <div className="appShell">
+            <header className="siteHeader">
+                <div className="brand">
+                    <div className="brandTitle">Detroit Lodge #2</div>
+                    <div className="brandSub">Free and Accepted Masons of Michigan</div>
+                </div>
+
+                <nav className="nav">
+                    <NavLink to="/">Home</NavLink>
+                    <NavLink to="/contact">Contact Us</NavLink>
+                    <NavLink to="/dues">Pay Your Dues</NavLink>
+                </nav>
+            </header>
+
+            <main className="siteMain">
+                <Page />
+            </main>
+
+            <footer className="siteFooter">
+                <span className="muted">© {new Date().getFullYear()} Detroit #2</span>
+            </footer>
+        </div>
     )
 }
 
