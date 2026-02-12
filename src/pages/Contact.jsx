@@ -1,16 +1,34 @@
-import { useState } from 'react';
-import { db } from '../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitContactForm, resetStatus } from '../store/contactSlice';
 
 export function ContactPage() {
+    const dispatch = useDispatch();
+    const { status: reduxStatus, error: reduxError } = useSelector(state => state.contact);
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         subject: '',
         message: ''
     });
-    const [status, setStatus] = useState({ type: '', message: '' });
-    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const isSubmitting = reduxStatus === 'loading';
+
+    useEffect(() => {
+        // Reset status when component mounts
+        dispatch(resetStatus());
+        return () => {
+            // Optional: Reset status when component unmounts
+            dispatch(resetStatus());
+        };
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (reduxStatus === 'succeeded') {
+            setFormData({ name: '', email: '', subject: '', message: '' });
+        }
+    }, [reduxStatus]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -19,23 +37,20 @@ export function ContactPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        setStatus({ type: '', message: '' });
-
-        try {
-            await addDoc(collection(db, 'submissions'), {
-                ...formData,
-                timestamp: serverTimestamp()
-            });
-            setStatus({ type: 'success', message: 'Thank you! Your message has been sent.' });
-            setFormData({ name: '', email: '', subject: '', message: '' });
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            setStatus({ type: 'error', message: 'Something went wrong. Please try again later.' });
-        } finally {
-            setIsSubmitting(false);
-        }
+        dispatch(submitContactForm(formData));
     };
+
+    const statusDisplay = () => {
+        if (reduxStatus === 'succeeded') {
+            return { type: 'success', message: 'Thank you! Your message has been sent.' };
+        }
+        if (reduxStatus === 'failed') {
+            return { type: 'error', message: reduxError || 'Something went wrong. Please try again later.' };
+        }
+        return null;
+    };
+
+    const display = statusDisplay();
 
     return (
         <section className="card">
@@ -45,9 +60,9 @@ export function ContactPage() {
             <div className="grid">
                 <div className="panel">
                     <h2>Send a Message</h2>
-                    {status.message && (
-                        <div className={status.type === 'success' ? 'success-msg' : 'error-msg'}>
-                            {status.message}
+                    {display && (
+                        <div className={display.type === 'success' ? 'success-msg' : 'error-msg'}>
+                            {display.message}
                         </div>
                     )}
                     <form onSubmit={handleSubmit}>

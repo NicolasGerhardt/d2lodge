@@ -8,9 +8,11 @@ This repository contains the source code for the Detroit #2 Club website. The si
 
 ### Key Features
 - **Responsive Design**: Modern, mobile-first layout with a custom CSS theme.
-- **Fast Performance**: Optimized builds using Vite 5.
+- **Fast Performance**: Optimized builds using Vite 6.
+- **State Management**: Centralized state management using Redux Toolkit.
 - **Custom Hash Routing**: Lightweight client-side navigation using React hooks.
 - **Firebase Hosting**: Fully configured for deployment to Firebase.
+- **Google Sheets Integration**: Contact form submissions are saved to a Google Sheet via Google Apps Script.
 
 ---
 
@@ -18,7 +20,8 @@ This repository contains the source code for the Detroit #2 Club website. The si
 
 - **Language**: [JavaScript (ESM)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
 - **Framework**: [React 18](https://reactjs.org/)
-- **Build Tool**: [Vite 5](https://vitejs.dev/)
+- **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/)
+- **Build Tool**: [Vite 6](https://vite.dev/)
 - **Styling**: Plain CSS with CSS variables
 - **Deployment**: [Firebase Hosting](https://firebase.google.com/docs/hosting)
 - **Linting**: [ESLint](https://eslint.org/)
@@ -99,6 +102,7 @@ The project uses the following environment variables for Firebase integration (a
 - `VITE_FIREBASE_STORAGE_BUCKET`: Your Firebase storage bucket.
 - `VITE_FIREBASE_MESSAGING_SENDER_ID`: Your Firebase messaging sender ID.
 - `VITE_FIREBASE_APP_ID`: Your Firebase app ID.
+- `VITE_GOOGLE_SHEETS_URL`: Your Google Apps Script Web App URL.
 
 ---
 
