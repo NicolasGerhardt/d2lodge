@@ -29,6 +29,18 @@
   backdrop-filter: blur(10px);
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandLogo {
+  height: 42px;
+  width: auto;
+  border-radius: 4px;
+}
+
 .brandTitle {
   font-weight: 800;
   letter-spacing: 0.2px;

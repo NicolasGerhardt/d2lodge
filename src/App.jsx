@@ -22,8 +22,11 @@ function App() {
         <div className="appShell">
             <header className="siteHeader">
                 <div className="brand">
-                    <div className="brandTitle">Detroit Lodge #2</div>
-                    <div className="brandSub">Free and Accepted Masons of Michigan</div>
+                    <img src="/BigD.png" alt="Detroit Lodge #2 Logo" className="brandLogo" />
+                    <div className="brandInfo">
+                        <div className="brandTitle">Detroit Lodge #2</div>
+                        <div className="brandSub">Free and Accepted Masons of Michigan</div>
+                    </div>
                 </div>
 
                 <nav className="nav">
