@@ -51,6 +51,8 @@ export function ContactPage() {
     };
 
     const display = statusDisplay();
+    
+    const subjects = ['General Inquiry', 'Membership', 'Dues Assistance', "Website Feature Request", 'Other'];
 
     return (
         <section className="card">
@@ -92,15 +94,19 @@ export function ContactPage() {
                         </div>
                         <div className="form-group">
                             <label htmlFor="subject">Subject</label>
-                            <input
-                                type="text"
+                            <select
                                 id="subject"
                                 name="subject"
                                 value={formData.subject}
                                 onChange={handleChange}
                                 className="form-input"
                                 required
-                            />
+                            >
+                                <option value="" disabled>Select a subject</option>
+                                {subjects.map(s => (
+                                    <option key={s} value={s}>{s}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="form-group">
                             <label htmlFor="message">Message</label>

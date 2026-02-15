@@ -1,21 +1,44 @@
-import { useMemo  } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { onAuthStateChanged } from 'firebase/auth'
 import { ContactPage } from './pages/Contact.jsx'
 import { HomePage } from './pages/HomePage.jsx'
 import { DuesPage } from './pages/Dues.jsx'
 import { NotFoundPage } from './pages/NotFound.jsx'
+import { LoginPage } from './pages/Login.jsx'
 import { NavLink } from './components/NavLink.jsx'
 import { useHashRoute } from './hooks/useHashRoute.jsx'
+import { auth } from './firebase'
+import { setUser, clearUser, selectUser } from './store/authSlice'
 import './App.css'
 
 
 function App() {
     const route = useHashRoute()
+    const dispatch = useDispatch()
+    const user = useSelector(selectUser)
+
+    useEffect(() => {
+        const unsub = onAuthStateChanged(auth, (fbUser) => {
+            if (fbUser) {
+                const { uid, email, displayName } = fbUser
+                dispatch(setUser({ uid, email, displayName }))
+            } else {
+                dispatch(clearUser())
+            }
+        })
+        return () => unsub()
+    }, [dispatch])
 
     const Page = useMemo(() => {
-        if (route === '/' || route === '') return HomePage
-        if (route === '/contact') return ContactPage
-        if (route === '/dues') return DuesPage
-        return NotFoundPage
+        switch (route.toLowerCase()) {
+            case '': return HomePage
+            case '/': return HomePage
+            case '/contact': return ContactPage
+            case '/dues': return DuesPage
+            case '/login': return LoginPage
+            default: return NotFoundPage
+        }
     }, [route])
 
     return (
@@ -33,6 +56,9 @@ function App() {
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/contact">Contact Us</NavLink>
                     <NavLink to="/dues">Pay Your Dues</NavLink>
+                    {user && <>
+                        <NavLink to="/login">Sign Out</NavLink>
+                    </>}
                 </nav>
             </header>
 

@@ -19,7 +19,7 @@ export function HomePage() {
                 <div className="panel">
                     <h2>Quick links</h2>
                     <ul>
-                        <li><a href="https://mi.grandview.systems/">Michigan Masons Grandview Lodge lookup</a></li>
+                        <li><a href="https://mi.grandview.systems/users/sign_in/">Michigan Masons Grandview Lodge lookup</a></li>
                         <li><a href="https://michiganmasons.org/">Grand Lodge of Michigan</a></li>
                     </ul>
                 </div>
