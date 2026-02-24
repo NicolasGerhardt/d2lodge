@@ -16,6 +16,10 @@ export function AdminPage() {
     const [editingUser, setEditingUser] = useState(null)
     const [selectedRoles, setSelectedRoles] = useState([])
     
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1)
+    const usersPerPage = 20
+    
     const handleEditRoles = (user) => {
         setEditingUser(user)
         setSelectedRoles(user.roles || [])
@@ -55,6 +59,11 @@ export function AdminPage() {
             dispatch(fetchRoles())
         }
     }, [dispatch, user])
+
+    // Reset page if user list changes (e.g. search or refresh)
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [users.length])
 
     if (!user || !user.roles?.includes('admin')) {
         return (
@@ -112,54 +121,72 @@ export function AdminPage() {
                     {status === 'loading' && <p>Loading users...</p>}
                     {status === 'failed' && <p className="error-msg">{error}</p>}
                     {status === 'succeeded' && (
-                        <div className="table-container">
-                            <table className="admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Roles</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {users.map(u => (
-                                        <tr key={u.id}>
-                                            <td>{u.displayName || 'N/A'}</td>
-                                            <td>{u.email}</td>
-                                            <td>
-                                                {u.roles && u.roles.length > 0 
-                                                    ? u.roles.map(role => (
-                                                        <span key={role} className="role-badge">{role}</span>
-                                                      ))
-                                                    : <span className="muted">No roles</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                <button 
-                                                    className="btn-link" 
-                                                    onClick={() => handleEditRoles(u)}
-                                                >
-                                                    Edit Roles
-                                                </button>
-                                            </td>
+                        <>
+                            <div className="table-container">
+                                <table className="admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Roles</th>
+                                            <th>Actions</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        {users
+                                            .slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage)
+                                            .map(u => (
+                                                <tr key={u.id}>
+                                                    <td>{u.displayName || 'N/A'}</td>
+                                                    <td>{u.email}</td>
+                                                    <td>
+                                                        {u.roles && u.roles.length > 0 
+                                                            ? u.roles.map(role => (
+                                                                <span key={role} className="role-badge">{role}</span>
+                                                            ))
+                                                            : <span className="muted">No roles</span>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <button 
+                                                            className="btn-link" 
+                                                            onClick={() => handleEditRoles(u)}
+                                                        >
+                                                            Edit Roles
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {users.length > usersPerPage && (
+                                <div className="pagination">
+                                    <button 
+                                        className="btn" 
+                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                    >
+                                        &larr; Previous
+                                    </button>
+                                    <span className="pagination-info">
+                                        Page {currentPage} of {Math.ceil(users.length / usersPerPage)}
+                                    </span>
+                                    <button 
+                                        className="btn" 
+                                        onClick={() => setCurrentPage(p => Math.min(Math.ceil(users.length / usersPerPage), p + 1))}
+                                        disabled={currentPage >= Math.ceil(users.length / usersPerPage)}
+                                    >
+                                        Next &rarr;
+                                    </button>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
 
-                <div className="panel">
-                    <h2>System Overview</h2>
-                    <p>Manage lodge members, roles, and website content from here.</p>
-                    <div className="muted" style={{ marginTop: '1rem' }}>
-                        Feature development in progress...
-                    </div>
-                </div>
-                
-                <div className="panel">
+                <div className="panel" style={{ gridColumn: '1 / -1' }}>
                     <h2>Manage Roles</h2>
                     <p>Create or delete available system roles.</p>
                     <div style={{ marginTop: '1rem' }}>
@@ -183,15 +210,6 @@ export function AdminPage() {
                         )}
                         <button className="btn" onClick={handleCreateRole}>Create New Role</button>
                     </div>
-                </div>
-
-                <div className="panel">
-                    <h2>Quick Actions</h2>
-                    <ul style={{ paddingLeft: '1.2rem' }}>
-                        <li>View Member List</li>
-                        <li>Update Dues Information</li>
-                        <li>Manage Roles</li>
-                    </ul>
                 </div>
             </div>
         </section>

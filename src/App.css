@@ -376,3 +376,18 @@ input, textarea, button {
 .italic {
   font-style: italic;
 }
+
+/* Pagination Styles */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+}
