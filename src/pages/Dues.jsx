@@ -8,7 +8,7 @@ export function DuesPage() {
                 Online dues payment is now being processed through Grandview Systems.
             </p>
 
-            <div className="grid">
+            <div className="grid grid-2-1">
                 <div className="panel">
                     <h2>How to Pay Online</h2>
                     <ol>
