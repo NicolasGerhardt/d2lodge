@@ -111,6 +111,19 @@
   }
 }
 
+.grid-2-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+@media (min-width: 820px) {
+  .grid-2-1 {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
 .panel {
   border: 1px solid var(--border);
   background: var(--card-strong);

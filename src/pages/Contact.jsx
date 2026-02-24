@@ -59,7 +59,7 @@ export function ContactPage() {
             <h1>Contact Us</h1>
             <p className="lead">Questions, updates, or dues help — reach out anytime.</p>
 
-            <div className="grid">
+            <div className="grid grid-2-1">
                 <div className="panel">
                     <h2>Send a Message</h2>
                     {display && (
@@ -127,9 +127,10 @@ export function ContactPage() {
                 </div>
 
                 <div className="panel">
-                    <h2>Direct Contact</h2>
+                    <h2>FYI</h2>
                     <p className="muted">
-                        Tip: Include your full name and the reason you’re contacting us so we can respond faster.
+                        We typically respond to new inquiries within about a week. 
+                        For a faster response, please include your full name and the specific details of your request.
                     </p>
                 </div>
             </div>

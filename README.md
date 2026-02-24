@@ -1,4 +1,4 @@
-# Detroit #2 Club (d2lodge)
+# Detroit #2 Website 
 
 A modern, responsive web application for the Detroit #2 Club. Built with React and Vite, and hosted on Firebase.
 
