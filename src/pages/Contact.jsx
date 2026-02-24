@@ -1,19 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { submitContactForm, resetStatus } from '../store/contactSlice';
+import { selectUser } from '../store/authSlice';
 
 export function ContactPage() {
     const dispatch = useDispatch();
+    const user = useSelector(selectUser);
     const { status: reduxStatus, error: reduxError } = useSelector(state => state.contact);
 
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
+        name: user?.displayName || '',
+        email: user?.email || '',
         subject: '',
         message: ''
     });
 
     const isSubmitting = reduxStatus === 'loading';
+
+    useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                name: prev.name === '' ? (user.displayName || '') : prev.name,
+                email: prev.email === '' ? (user.email || '') : prev.email
+            }));
+        }
+    }, [user]);
 
     useEffect(() => {
         // Reset status when component mounts
@@ -26,9 +38,14 @@ export function ContactPage() {
 
     useEffect(() => {
         if (reduxStatus === 'succeeded') {
-            setFormData({ name: '', email: '', subject: '', message: '' });
+            setFormData({ 
+                name: user?.displayName || '', 
+                email: user?.email || '', 
+                subject: '', 
+                message: '' 
+            });
         }
-    }, [reduxStatus]);
+    }, [reduxStatus, user]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
