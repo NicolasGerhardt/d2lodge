@@ -50,13 +50,13 @@ export function AdminPage() {
     }
     
     useEffect(() => {
-        if (user && user.roles?.roles?.includes('admin')) {
+        if (user && user.roles?.includes('admin')) {
             dispatch(fetchUsersWithRoles())
             dispatch(fetchRoles())
         }
     }, [dispatch, user])
 
-    if (!user || !user.roles?.roles?.includes('admin')) {
+    if (!user || !user.roles?.includes('admin')) {
         return (
             <section className="card">
                 <h1>Access Denied</h1>

@@ -24,18 +24,22 @@ function App() {
         const unsub = onAuthStateChanged(auth, async (fbUser) => {
             if (fbUser) {
                 // Fetch UserRoles
-                let roles = null;
+                let roles = [];
                 try {
                     const rolesDoc = await getDoc(doc(db, 'UserRoles', fbUser.uid));
                     if (rolesDoc.exists()) {
-                        roles = rolesDoc.data();
+                        roles = rolesDoc.data()?.roles || [];
                     }
                 } catch (err) {
                     console.error("Error fetching UserRoles:", err);
                 }
 
-                const { uid, email, displayName } = fbUser
-                dispatch(setUser({ uid, email, displayName, roles }))
+                dispatch(setUser({ 
+                    uid: fbUser.uid, 
+                    email: fbUser.email, 
+                    displayName: fbUser.displayName, 
+                    roles 
+                }))
             } else {
                 dispatch(clearUser())
             }
@@ -69,7 +73,7 @@ function App() {
 
                 <nav className="nav">
                     <NavLink to="/">Home</NavLink>
-                    {user?.roles?.roles?.includes('admin') && (
+                    {user?.roles?.includes('admin') && (
                         <NavLink to="/admin">Admin</NavLink>
                     )}
                     <NavLink to="/contact">Contact Us</NavLink>

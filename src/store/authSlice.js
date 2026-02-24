@@ -28,7 +28,7 @@ export const signupUser = createAsyncThunk(
 
             // Pull down UserRoles
             const rolesDoc = await getDoc(doc(db, 'UserRoles', fbUser.uid));
-            const roles = rolesDoc.exists() ? rolesDoc.data() : null;
+            const roles = rolesDoc.exists() ? (rolesDoc.data()?.roles || []) : [];
 
             return { uid: fbUser.uid, email: fbUser.email, displayName: name, roles };
         } catch (error) {
@@ -46,7 +46,7 @@ export const loginUser = createAsyncThunk(
 
             // Pull down UserRoles
             const rolesDoc = await getDoc(doc(db, 'UserRoles', fbUser.uid));
-            const roles = rolesDoc.exists() ? rolesDoc.data() : null;
+            const roles = rolesDoc.exists() ? (rolesDoc.data()?.roles || []) : [];
 
             return { 
                 uid: fbUser.uid, 

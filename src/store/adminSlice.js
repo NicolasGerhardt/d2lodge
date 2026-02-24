@@ -6,27 +6,21 @@ export const fetchUsersWithRoles = createAsyncThunk(
     'admin/fetchUsersWithRoles',
     async (_, { rejectWithValue }) => {
         try {
-            // Fetch all users
+            // Fetch all users and UserRoles
             const usersSnapshot = await getDocs(collection(db, 'users'));
-            const usersList = usersSnapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
-
-            // Fetch all UserRoles
             const rolesSnapshot = await getDocs(collection(db, 'UserRoles'));
+            
             const rolesMap = {};
             rolesSnapshot.docs.forEach(doc => {
-                rolesMap[doc.id] = doc.data().roles;
+                rolesMap[doc.id] = doc.data();
             });
 
-            // Merge roles into usersList
-            const mergedList = usersList.map(user => ({
-                ...user,
-                roles: rolesMap[user.id] || []
+            // Merge roles and return
+            return usersSnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+                roles: rolesMap[doc.id]?.roles || []
             }));
-
-            return mergedList;
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -37,8 +31,7 @@ export const updateUserRoles = createAsyncThunk(
     'admin/updateUserRoles',
     async ({ userId, roles }, { getState, rejectWithValue }) => {
         try {
-            const { admin } = getState();
-            const availableRoles = admin.availableRoles;
+            const { admin: { availableRoles } } = getState();
             
             // Validate roles
             const invalidRoles = roles.filter(r => !availableRoles.includes(r));
