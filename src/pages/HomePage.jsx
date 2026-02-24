@@ -3,15 +3,12 @@ import { Link } from '../components/Link.jsx'
 export function HomePage() {
     return (
         <section className="card">
-            <h1>Detroit #2</h1>
-            <p className="lead">
-                Welcome to the official site for our club. We’re glad you’re here.
-            </p>
-
+            <h1>Detroit Lodge #2</h1>
+            <p className="lead">Two Centuries of Tradition, a Lifetime of Fellowship</p>
             <div className="grid">
                 <div className="panel">
                     <h2>Our History</h2>
-                    <p>Detroit Lodge No. 2 has been a cornerstone of the community since 1821—well before Michigan was granted statehood in 1865. Our historic Masonic Temple in Detroit recently celebrated its 100th anniversary, representing over two centuries of rich tradition and service.</p>
+                    <p>Detroit Lodge #2 has been a cornerstone of the community since 1821—well before Michigan was granted statehood in 1865. Our historic Masonic Temple in Detroit recently celebrated its 100th anniversary, representing over two centuries of rich tradition and service.</p>
                 </div>
 
                 <div className="panel">
