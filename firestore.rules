@@ -10,7 +10,7 @@ service cloud.firestore {
     }
 
     // Helper function to check if user is verified
-    function isAdmin() {
+    function isVerified() {
       return request.auth != null &&
         exists(/databases/$(database)/documents/UserRoles/$(request.auth.uid)) &&
         'verified' in get(/databases/$(database)/documents/UserRoles/$(request.auth.uid)).data.roles;

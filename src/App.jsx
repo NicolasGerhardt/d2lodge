@@ -77,7 +77,7 @@ function App() {
                     {user ? (
                         <NavLink to="/login">Log Out</NavLink>
                     ) : (
-                        <NavLink to="/login">Login In</NavLink>
+                        <NavLink to="/login">Login</NavLink>
                     )}
                 </nav>
             </header>
