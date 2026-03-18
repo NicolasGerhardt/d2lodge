@@ -94,43 +94,38 @@ export function PostsPage() {
 
 function PostUpsertForm({ user, postToEdit = null, onCancel = null }) {
     const dispatch = useDispatch();
-    const [isOpen, setIsOpen] = useState(false);
+    const isEditMode = !!postToEdit;
     
     const getTodayDateStr = () => new Date().toISOString().split('T')[0];
 
-    let initialFormData;
-    initialFormData = {
+    const [formData, setFormData] = useState({
         author: user?.displayName || '',
         title: '',
         content: '',
         publish_date: getTodayDateStr(),
         published: false
-    };
-
-    const [formData, setFormData] = useState(initialFormData);
+    });
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    useEffect(() => {
-        if (user && !postToEdit) {
-            setFormData(prev => ({ ...prev, author: user.displayName || '' }));
-        }
-    }, [user, postToEdit]);
 
     useEffect(() => {
         if (postToEdit) {
             setFormData({
-                author: postToEdit.author || user.displayName,
+                author: postToEdit.author || user?.displayName || '',
                 title: postToEdit.title || '',
                 content: postToEdit.content || '',
                 publish_date: postToEdit.publish_date ? postToEdit.publish_date.split('T')[0] : getTodayDateStr(),
                 published: postToEdit.published ?? false
             });
-            setIsOpen(true);
         } else {
-            setFormData(initialFormData);
-            setIsOpen(false);
+            setFormData({
+                author: user?.displayName || '',
+                title: '',
+                content: '',
+                publish_date: getTodayDateStr(),
+                published: false
+            });
         }
-    }, [initialFormData, postToEdit, user.displayName]);
+    }, [postToEdit, user?.displayName]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -146,8 +141,16 @@ function PostUpsertForm({ user, postToEdit = null, onCancel = null }) {
                 if (onCancel) onCancel();
             } else {
                 await dispatch(createPost(dataToSubmit)).unwrap();
-                setFormData(initialFormData);
-                setIsOpen(false);
+                setFormData({
+                    author: user?.displayName || '',
+                    title: '',
+                    content: '',
+                    publish_date: getTodayDateStr(),
+                    published: false
+                });
+                // Close the details element if we were creating a post
+                const details = e.target.closest('details');
+                if (details) details.open = false;
             }
         } catch (err) {
             console.error('Failed to save post:', err);
@@ -156,17 +159,13 @@ function PostUpsertForm({ user, postToEdit = null, onCancel = null }) {
         }
     };
 
-    const isEditMode = !!postToEdit;
-
     return (
-        <div className="accordion">
-            <button className="accordion-header" onClick={() => !isEditMode && setIsOpen(!isOpen)} disabled={isEditMode}>
+        <details className={`accordion ${isEditMode ? 'no-toggle' : ''}`} open={isEditMode}>
+            <summary className="accordion-summary" onClick={(e) => isEditMode && e.preventDefault()}>
                 <span>{isEditMode ? 'Edit Post' : 'Create New Post'}</span>
-                {!isEditMode && <span className={`accordion-icon ${isOpen ? 'open' : ''}`}>▼</span>}
-            </button>
-            {isOpen && (
-                <div className="accordion-content">
-                    <form onSubmit={handleSubmit}>
+            </summary>
+            <div className="accordion-content">
+                <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label>Author</label>
                             <input
@@ -223,15 +222,14 @@ function PostUpsertForm({ user, postToEdit = null, onCancel = null }) {
                                 {isSubmitting ? 'Saving...' : (isEditMode ? 'Update Post' : 'Create Post')}
                             </button>
                             {isEditMode && (
-                                <button className="btn" type="button" onClick={onCancel} disabled={isSubmitting}>
+                                <button className="btn" type="button" onClick={onCancel} style={{ background: 'transparent', borderColor: 'var(--muted)', color: 'var(--muted)' }}>
                                     Cancel
                                 </button>
                             )}
                         </div>
                     </form>
                 </div>
-            )}
-        </div>
+            </details>
     );
 }
 

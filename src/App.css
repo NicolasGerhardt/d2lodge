@@ -401,7 +401,7 @@ input, textarea, button {
   margin-top: 24px;
 }
 
-/* Accordion Styles */
+/* Native Accordion Styles */
 .accordion {
   border: 1px solid var(--border);
   background: var(--card-strong);
@@ -410,37 +410,52 @@ input, textarea, button {
   overflow: hidden;
 }
 
-.accordion-header {
-  width: 100%;
-  padding: 14px 20px;
-  background: none;
-  border: none;
+.accordion-summary {
+  padding: 16px 20px;
   color: var(--text);
   font-size: 16px;
   font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+  list-style: none; /* Hide default arrow in some browsers */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
-  transition: background 0.2s;
+  min-height: 52px;
 }
 
-.accordion-header:hover {
+.accordion-summary::-webkit-details-marker {
+  display: none; /* Hide default arrow in Chrome/Safari */
+}
+
+.accordion-summary:hover {
   background: rgba(255, 255, 255, 0.05);
+}
+
+.accordion-summary::after {
+  content: '▼';
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.accordion[open] .accordion-summary::after {
+  transform: rotate(180deg);
+}
+
+.accordion[open] .accordion-summary {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Hide arrow when in edit mode (specific use case) */
+.accordion.no-toggle .accordion-summary::after {
+  display: none;
 }
 
 .accordion-content {
   padding: 20px;
-  border-top: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.1);
-}
-
-.accordion-icon {
-  transition: transform 0.3s ease;
-}
-
-.accordion-icon.open {
-  transform: rotate(180deg);
 }
 
 .post {

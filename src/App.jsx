@@ -91,7 +91,7 @@ function App() {
                         <NavLink to="/admin">Admin</NavLink>
                     )}
                     <NavLink to="/contact">Contact Us</NavLink>
-                    <NavLink to="/dues">Pay Your Dues</NavLink>
+                    <NavLink to="/dues">Dues</NavLink>
                     {user ? (
                         <>
                             <NavLink to="/news">News</NavLink>
