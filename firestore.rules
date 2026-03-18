@@ -16,6 +16,13 @@ service cloud.firestore {
         'verified' in get(/databases/$(database)/documents/UserRoles/$(request.auth.uid)).data.roles;
     }
 
+    // Helper function to check if user is post writer
+    function isPostWriter() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/UserRoles/$(request.auth.uid)) &&
+        'post writer' in get(/databases/$(database)/documents/UserRoles/$(request.auth.uid)).data.roles;
+    }
+
     // Allow users to read their own document, or admins to read all user records
     match /users/{userId} {
       allow read: if request.auth != null && (
@@ -36,6 +43,13 @@ service cloud.firestore {
     match /Roles/{roleId} {
       allow read: if isAdmin();
       allow write: if isAdmin();
+    }
+
+    // Allow read if post.published is true and post.publish_date is in past of if user has write access
+    // Allow write if user is post_writer or admin
+    match /posts/{postId} {
+      allow read: if (resource.data.published && resource.data.publish_date <= request.time) || isAdmin() || isPostWriter();
+      allow write: if isAdmin() || isPostWriter();
     }
   }
 }

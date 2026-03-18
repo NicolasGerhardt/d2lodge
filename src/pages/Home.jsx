@@ -1,6 +1,39 @@
 import { Link } from '../components/Link.jsx'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchPublishedPosts, selectAllPosts, selectPostsStatus } from '../store/postsSlice'
+import { Post } from '../components/Post.jsx'
 
 export function HomePage() {
+    const dispatch = useDispatch();
+    const posts = useSelector(selectAllPosts);
+    const status = useSelector(selectPostsStatus);
+
+    useEffect(() => {
+        if (status === 'idle') {
+            dispatch(fetchPublishedPosts());
+        }
+    }, [status, dispatch]);
+
+    const latestPost = posts
+        .filter(post => post.published)
+        .reduce((latest, post) => {
+            if (!latest || new Date(post.publish_date) > new Date(latest.publish_date)) {
+                return post;
+            }
+            return latest;
+        }, null);
+
+    const formatDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    };
+
     return (
         <section className="card">
             <h1>Detroit Lodge #2</h1>
@@ -30,6 +63,18 @@ export function HomePage() {
                     <p>Ready to take the next step? Visit our <Link to="/contact">Contact Us</Link> page and send us a brief message about yourself—we’d love to connect!</p>
                 </div>
             </div>
+
+            {latestPost && latestPost.published && (
+                <div style={{ marginTop: '24px' }}>
+                    <h2 style={{ marginBottom: '16px' }}>Latest News</h2>
+                    <Post
+                        post={latestPost}
+                        date={formatDate(latestPost.publish_date)}
+                        canEdit={false}
+                    />
+                </div>
+            )}
+
         </section>
     )
 }

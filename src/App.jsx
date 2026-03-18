@@ -1,17 +1,18 @@
-import { useEffect, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { onAuthStateChanged } from 'firebase/auth'
-import { doc, getDoc } from 'firebase/firestore'
-import { ContactPage } from './pages/Contact.jsx'
-import { HomePage } from './pages/HomePage.jsx'
-import { DuesPage } from './pages/Dues.jsx'
-import { AdminPage } from './pages/AdminPage.jsx'
-import { NotFoundPage } from './pages/NotFound.jsx'
-import { LoginPage } from './pages/Login.jsx'
-import { NavLink } from './components/NavLink.jsx'
-import { useHashRoute } from './hooks/useHashRoute.jsx'
-import { auth, db } from './firebase'
-import { setUser, clearUser, selectUser } from './store/authSlice'
+import {useEffect, useMemo} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {onAuthStateChanged} from 'firebase/auth'
+import {doc, getDoc} from 'firebase/firestore'
+import {ContactPage} from './pages/Contact.jsx'
+import {HomePage} from './pages/Home.jsx'
+import {DuesPage} from './pages/Dues.jsx'
+import {AdminPage} from './pages/Admin.jsx'
+import {PostsPage} from './pages/Posts.jsx'
+import {NotFoundPage} from './pages/NotFound.jsx'
+import {LoginPage} from './pages/Login.jsx'
+import {NavLink} from './components/NavLink.jsx'
+import {useHashRoute} from './hooks/useHashRoute.jsx'
+import {auth, db} from './firebase'
+import {setUser, clearUser, selectUser} from './store/authSlice'
 import './App.css'
 
 
@@ -34,11 +35,11 @@ function App() {
                     console.error("Error fetching UserRoles:", err);
                 }
 
-                dispatch(setUser({ 
-                    uid: fbUser.uid, 
-                    email: fbUser.email, 
-                    displayName: fbUser.displayName, 
-                    roles 
+                dispatch(setUser({
+                    uid: fbUser.uid,
+                    email: fbUser.email,
+                    displayName: fbUser.displayName,
+                    roles
                 }))
             } else {
                 dispatch(clearUser())
@@ -49,22 +50,35 @@ function App() {
 
     const Page = useMemo(() => {
         switch (route.toLowerCase()) {
-            case '': return HomePage
-            case '/': return HomePage
-            case '/contact': return ContactPage
-            case '/dues': return DuesPage
-            case '/login': return LoginPage
-            case '/signup': return LoginPage
-            case '/admin': return AdminPage
-            default: return NotFoundPage
+            case '':
+                return HomePage
+            case '/':
+                return HomePage
+            case '/contact':
+                return ContactPage
+            case '/dues':
+                return DuesPage
+            case '/login':
+                return LoginPage
+            case '/logout':
+                return LoginPage
+            case '/signup':
+                return LoginPage
+            case '/news':
+                return PostsPage;
+            case '/admin':
+                if (user && user.roles.includes('admin')) return AdminPage;
+                return HomePage;
+            default:
+                return NotFoundPage
         }
-    }, [route])
+    }, [route, user])
 
     return (
         <div className="appShell">
             <header className="siteHeader">
                 <div className="brand">
-                    <img src="/BigD.png" alt="Detroit Lodge #2 Logo" className="brandLogo" />
+                    <img src="/BigD.png" alt="Detroit Lodge #2 Logo" className="brandLogo"/>
                     <div className="brandInfo">
                         <div className="brandTitle">Detroit Lodge #2</div>
                         <div className="brandSub">Free and Accepted Masons of Michigan</div>
@@ -79,7 +93,10 @@ function App() {
                     <NavLink to="/contact">Contact Us</NavLink>
                     <NavLink to="/dues">Pay Your Dues</NavLink>
                     {user ? (
-                        <NavLink to="/login">Log Out</NavLink>
+                        <>
+                            <NavLink to="/news">News</NavLink>
+                            <NavLink to="/logout">Log Out</NavLink>
+                        </>
                     ) : (
                         <NavLink to="/login">Login</NavLink>
                     )}
@@ -87,7 +104,7 @@ function App() {
             </header>
 
             <main className="siteMain">
-                <Page />
+                <Page/>
             </main>
 
             <footer className="siteFooter">

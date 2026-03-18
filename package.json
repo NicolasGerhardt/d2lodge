@@ -9,6 +9,7 @@
     "build": "vite build",
     "deploy": "vite build && firebase deploy",
     "deploy:rules": "firebase deploy --only firestore:rules",
+    "deploy:indexes": "firebase deploy --only firestore:indexes",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -17,7 +18,9 @@
     "firebase": "^12.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-redux": "^9.2.0"
+    "react-markdown": "^10.1.0",
+    "react-redux": "^9.2.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
